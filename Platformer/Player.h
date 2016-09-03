@@ -6,7 +6,7 @@
 class Player : public GameObject
 {
 public:
-    Player(std::string img_path);
+    Player(std::string img_path, float x, float y);
     Player();
     ~Player();
 
@@ -17,4 +17,7 @@ public:
 
 private:
     bool isGround;
+
+    bool col_down;
+    bool col_up;
 };

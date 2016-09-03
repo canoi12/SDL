@@ -11,7 +11,7 @@
 class GameObject
 {
 public:
-    GameObject(std::string img_path);
+    GameObject(std::string img_path, float x, float y);
     GameObject();
     ~GameObject();
 

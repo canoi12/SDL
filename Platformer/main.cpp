@@ -9,13 +9,25 @@
 #include "Camera.h"
 #include <iostream>
 #include <vector>
+#include <tinyxml.h>
 
-std::vector<Enemy*> enemies (4);
+TiXmlDocument doc("assets/levelteste.tmx");
+
+std::vector<GameObject*> objects;
 
 const int FPS = 60;
 
 int main(int argc, char **argv)
 {
+    doc.LoadFile();
+
+    TiXmlElement* root = doc.FirstChildElement();
+    for(TiXmlElement* elem = root->FirstChildElement(); elem != NULL;
+    elem = elem->NextSiblingElement()){
+        std::string elemName = elem->Value();
+
+        std::cout << elemName << std::endl;
+    }
     SDL_Window* window = NULL;
     window = SDL_CreateWindow("Hello World",50,50,512,512,SDL_WINDOW_SHOWN);
 
@@ -56,8 +68,11 @@ int main(int argc, char **argv)
     bg_src.w = 16;
     bg_src.h = 16;
 
-    Player* player = new Player("assets/astronaut.png");
-    player->setQuad(0,0,16,16);
+   /* Player* player = new Player("assets/astronaut.png");
+    player->setQuad(0,0,16,16);*/
+
+    objects.push_back(new Player("assets/astronaut.png", 0, 0));
+    objects[0]->setQuad(0,0,16,16);
 
     float timeCheck = SDL_GetTicks();
     float delta = 0;
@@ -69,14 +84,15 @@ int main(int argc, char **argv)
     float ntime = 0.f;
     float fps = 0;
 
-    for(int i = 0; i < enemies.size(); i++){
-        enemies[i] = new Enemy("assets/skeleton.png");
-        enemies[i]->setQuad(0,0,16,16);
+    for(int i = 1; i < 5; i++){
+        objects.push_back(new Enemy("assets/box.png", i*16, 120));
+        objects[i]->setQuad(0,0,16,16);
+        //objects[i]->setX(i*16);
     }
-    enemies[0]->setX(0);
-    enemies[1]->setX(100);
-    enemies[2]->setX(200);
-    enemies[3]->setX(300);
+
+    /*enemies.push_back(new Enemy("assets/box.png"));
+    enemies[4]->setQuad(0,0,16,16);
+    enemies[4]->setX(400);*/
 
     //std::cout << enemies.size() << std::endl;
 
@@ -108,13 +124,15 @@ int main(int argc, char **argv)
         }
 
 
-        for(int i = 0; i < enemies.size(); i++){
-            player->collision(enemies[i]);
-            enemies[i]->Update(delta);
-            enemies[i]->Draw();
+        for(int i = 0; i < objects.size(); i++){
+            //player->collision(enemies[i]);
+            for(int j = 0; j < objects.size(); j++){
+                if (objects[i] != objects[j])
+                    objects[i]->collision(objects[j]);
+            }
+            objects[i]->Update(delta);
+            objects[i]->Draw();
         }
-        player->Update(delta);
-        player->Draw();
 
         SDL_RenderPresent(renderer);
 

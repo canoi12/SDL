@@ -6,7 +6,7 @@
 class Enemy : public GameObject
 {
 public:
-    Enemy(std::string img_path);
+    Enemy(std::string img_path, float x, float y);
     Enemy();
     ~Enemy();
 

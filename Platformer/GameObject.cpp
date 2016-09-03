@@ -1,6 +1,6 @@
 #include "GameObject.h"
 
-GameObject::GameObject(std::string img_path)
+GameObject::GameObject(std::string img_path, float x, float y)
 {
     /*int image_width, image_height;
     image = IMG_LoadTexture(Renderer::getRenderer(),img_path.c_str());
@@ -88,12 +88,12 @@ int GameObject::getY()
 
 int GameObject::getCenterX()
 {
-    return (int)(x-(width/2));
+    return (int)(x+(width/2));
 }
 
 int GameObject::getCenterY()
 {
-    return (int)(y-(height/2));
+    return (int)(y+(height/2));
 }
 
 int GameObject::getWidth()

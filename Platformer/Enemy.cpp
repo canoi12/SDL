@@ -1,6 +1,6 @@
 #include "Enemy.h"
 
-Enemy::Enemy(std::string img_path)
+Enemy::Enemy(std::string img_path, float x, float y)
 {
     int image_width, image_height;
     image = IMG_LoadTexture(Renderer::getRenderer(),img_path.c_str());
@@ -13,8 +13,8 @@ Enemy::Enemy(std::string img_path)
     origin = {image_width/2, image_height/2};
     flip = SDL_FLIP_NONE;
     crop = rect;
-    x = 0.f;
-    y = 0.f;
+    setX(x);
+    setY(y);
 
     dx = 0.f;
     dy = 0.f;

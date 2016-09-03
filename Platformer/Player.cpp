@@ -16,7 +16,7 @@ float approach(float v1, float v2, float dt)
     return v1;
 }
 
-Player::Player(std::string img_path)
+Player::Player(std::string img_path, float x, float y)
 {
     int image_width, image_height;
     image = IMG_LoadTexture(Renderer::getRenderer(),img_path.c_str());
@@ -29,8 +29,8 @@ Player::Player(std::string img_path)
     origin = {image_width/2, image_height/2};
     flip = SDL_FLIP_NONE;
     crop = rect;
-    x = 0.f;
-    y = 0.f;
+    x = x;
+    y = y;
 
     dx = 0.f;
     dy = 0.f;
@@ -42,6 +42,8 @@ Player::Player(std::string img_path)
 
     bounce = 0.0f;
     isGround = false;
+
+    col_down = false;
 }
 
 Player::Player()
@@ -56,16 +58,17 @@ Player::~Player()
 
 bool Player::collision(GameObject* obj2)
 {
+    //col_down = false;
     float w = 0.5 * (width + obj2->getWidth());
     float h = 0.5 * (height + obj2->getHeight());
 
-    float dx = getCenterX() - obj2->getCenterX();
-    float dy = (getCenterY()) - obj2->getCenterY();
+    float dex = getCenterX() - obj2->getCenterX();
+    float dey = (getCenterY()) - obj2->getCenterY();
 
-    if (abs(dx) <= w && abs(dy) <= h)
+    if (abs(dex) <= w && abs(dey) <= h)
     {
-        float wy = w * dy;
-        float hx = h * dx;
+        float wy = w * dey;
+        float hx = h * dex;
 
         if (wy > hx){
             if (wy > -hx){
@@ -77,12 +80,27 @@ bool Player::collision(GameObject* obj2)
             if (wy > -hx)
                 setX(obj2->getX()+obj2->getWidth());
             else{
-                setY(obj2->getY()-getHeight());
+                setY(obj2->getY()-height);
+                dy = 0;
+                if(!isGround)
+                {
+                    isGround = true;
+                    xscale = 1.5f;
+                    yscale = 0.5f;
+                }
+                if (Keyboard::keyDown("up")){
+                    dy = -3.2f;
+                    xscale = 0.5f;
+                    yscale = 1.5f;
+                    isGround = false;
+                }
+                col_down = true;
             }
                 
         }
         return true;
     }
+    col_down = false;
     return false;
 }
 
@@ -103,8 +121,11 @@ void Player::Update(float delta)
     } else if(Keyboard::keyDown("right") || Keyboard::keyDown("left")) {
         playAnimation(0,4,1,0.6f);
     }
+        //std::cout << dy << std::endl;
+    if(y >= 128-origin.y)
+        col_down = true;
 
-    if (y < 128-origin.y){
+    if (!col_down){
         dy += 0.2f;
     }
     else {
@@ -123,6 +144,7 @@ void Player::Update(float delta)
             dy = -3.2f;
             xscale = 0.5f;
             yscale = 1.5f;
+            col_down = false;
             isGround = false;
         }
     }
