@@ -42,6 +42,20 @@ int main(int argc, char **argv)
     rect.y = 0;
     rect.w = 128;
     rect.h = 128;*/
+
+    SDL_Texture* bg_image = IMG_LoadTexture(renderer,"assets/bg.png");
+    SDL_Rect bg_rect;
+    SDL_Rect bg_src;
+    bg_rect.x = 0;
+    bg_rect.y = 0;
+    bg_rect.w = 16;
+    bg_rect.h = 16;
+
+    bg_src.x = 0;
+    bg_src.y = 0;
+    bg_src.w = 16;
+    bg_src.h = 16;
+
     Player* player = new Player("assets/astronaut.png");
     player->setQuad(0,0,16,16);
 
@@ -56,7 +70,7 @@ int main(int argc, char **argv)
     float fps = 0;
 
     for(int i = 0; i < enemies.size(); i++){
-        enemies[i] = new Enemy("assets/warrior2.png");
+        enemies[i] = new Enemy("assets/skeleton.png");
         enemies[i]->setQuad(0,0,16,16);
     }
     enemies[0]->setX(0);
@@ -75,6 +89,24 @@ int main(int argc, char **argv)
         SDL_RenderClear(renderer);
 
         //SDL_RenderCopy(renderer,image,NULL,&rect);
+        /*bg_rect.x = -Camera::X;
+        SDL_RenderCopy(renderer,bg_image,&bg_src,&bg_rect);
+        bg_rect.x = 128-Camera::X;
+        SDL_RenderCopy(renderer,bg_image,&bg_src,&bg_rect);
+        bg_rect.x = 256-Camera::X;
+        SDL_RenderCopy(renderer,bg_image,&bg_src,&bg_rect);
+        bg_rect.x = 384-Camera::X;
+        SDL_RenderCopy(renderer,bg_image,&bg_src,&bg_rect);
+        */
+        for(int i = 0; i < 128; i+=16)
+        {
+            bg_rect.y = i-Camera::Y;
+            for(int j = 0; j < 512; j += 16){
+                bg_rect.x = j-Camera::X;
+                SDL_RenderCopy(renderer,bg_image,&bg_src,&bg_rect);
+            }
+        }
+
 
         for(int i = 0; i < enemies.size(); i++){
             player->collision(enemies[i]);

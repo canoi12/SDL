@@ -12,6 +12,4 @@ public:
 
     void Update(float delta);
     void Draw();
-
-    int teste = 1;
 };
