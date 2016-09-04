@@ -1,8 +1,12 @@
 #pragma once
+#ifndef PLAYER
+#define PLAYER
 
 #include "GameObject.h"
+#include "Utils.h"
 #include "Keyboard.h"
 
+class Tilemap;
 class Player : public GameObject
 {
 public:
@@ -21,3 +25,5 @@ private:
     bool col_down;
     bool col_up;
 };
+
+#endif

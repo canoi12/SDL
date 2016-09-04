@@ -2,7 +2,7 @@ OBJS = *.cpp
 
 CC = g++
 
-COMPILER_FLAGS = -w
+COMPILER_FLAGS = -Wall
 
 LINKER_FLAGS = -lSDL2 -lSDL2_image -ltinyxml
 

@@ -1,4 +1,5 @@
 #include "Player.h"
+#include "Tilemap.h"
 
 //bool isGround = false;
 
@@ -122,15 +123,18 @@ void Player::Update(float delta)
         playAnimation(0,4,1,0.6f);
     }
         //std::cout << dy << std::endl;
-    if(y >= 128-origin.y)
+    if(y >= ScreenManager::currentScreen->map->map_height-origin.y)
         col_down = true;
 
-    if (!col_down){
+    if (!col_down && !Utils::check_solid(x, y + 7 + dy, ScreenManager::currentScreen->map)){
         dy += 0.2f;
     }
     else {
+        while(Utils::check_solid(x, y + 6 + dy, ScreenManager::currentScreen->map)) {
+            y -= 1;
+        }
         dy *= -bounce;
-        if(!isGround)
+         if(!isGround)
         {
             isGround = true;
             xscale = 1.5f;
@@ -154,8 +158,8 @@ void Player::Update(float delta)
     x += dx;
     y += dy;
 
-    x = fmax(origin.x-4,fmin(x,512+4-origin.x));
-    y = fmax(origin.y,fmin(y,128-origin.y));
+    x = fmax(origin.x-4,fmin(x,ScreenManager::currentScreen->map->map_width+4-origin.x));
+    y = fmax(origin.y,fmin(y,ScreenManager::currentScreen->map->map_height-origin.y));
 
     rect.x = (int)(x - (origin.x*xscale) - Camera::X);
     rect.y = (int)(y - (origin.y*yscale) - Camera::Y);
@@ -166,10 +170,20 @@ void Player::Update(float delta)
     Camera::X = x - (origin.x) - 64;
     Camera::Y = y - (origin.y) - 64;
 
+    if (Utils::check_solid(x - 4 + dx, y, ScreenManager::currentScreen->map) || Utils::check_solid(x + 4 + dx, y, ScreenManager::currentScreen->map)) {
+        dx = 0;
+        while(Utils::check_solid(x - 4, y, ScreenManager::currentScreen->map)) {
+            x += 1.2f;
+        }
+        while(Utils::check_solid(x + 4, y, ScreenManager::currentScreen->map)) {
+            x -= 1.2f;
+        }
+    }
+
     //oxscale = approach(xscale)
 
-    Camera::X = fmax(0,fmin(Camera::X, 512-128));
-    Camera::Y = fmax(0,fmin(Camera::Y,128-128));
+    Camera::X = fmax(0,fmin(Camera::X, ScreenManager::currentScreen->map->map_width-128));
+    Camera::Y = fmax(0,fmin(Camera::Y,ScreenManager::currentScreen->map->map_height-128));
 
     rect.w = (width) * xscale;
     rect.h = height * yscale;

@@ -1,4 +1,6 @@
 #pragma once
+#ifndef GAME_OBJECT
+#define GAME_OBJECT
 
 #include "GameObject.h"
 
@@ -12,3 +14,4 @@ public:
     void Update(float delta);
     void Draw();
 };
+#endif

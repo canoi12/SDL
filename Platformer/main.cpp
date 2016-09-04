@@ -1,33 +1,14 @@
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
 
-#include "Renderer.h"
-#include "Event.h"
-#include "Player.h"
-#include "Keyboard.h"
-#include "Enemy.h"
-#include "Camera.h"
-#include <iostream>
-#include <vector>
-#include <tinyxml.h>
-
-TiXmlDocument doc("assets/levelteste.tmx");
+#include "Utils.h"
 
 std::vector<GameObject*> objects;
+//std::vector<SDL_Rect> tileset;
+
 
 const int FPS = 60;
 
 int main(int argc, char **argv)
 {
-    doc.LoadFile();
-
-    TiXmlElement* root = doc.FirstChildElement();
-    for(TiXmlElement* elem = root->FirstChildElement(); elem != NULL;
-    elem = elem->NextSiblingElement()){
-        std::string elemName = elem->Value();
-
-        std::cout << elemName << std::endl;
-    }
     SDL_Window* window = NULL;
     window = SDL_CreateWindow("Hello World",50,50,512,512,SDL_WINDOW_SHOWN);
 
@@ -41,8 +22,7 @@ int main(int argc, char **argv)
     SDL_RenderSetLogicalSize(renderer, 128,128);
     Keyboard::getKeyboard();
 
-
-    SDL_Event* mainEvent = new SDL_Event();
+    //tileset.push_back(teste);
 
     /*SDL_Texture* image = NULL;
     image = IMG_LoadTexture(renderer,"assets/bg_sky.png");
@@ -54,6 +34,13 @@ int main(int argc, char **argv)
     rect.y = 0;
     rect.w = 128;
     rect.h = 128;*/
+
+    /*SDL_Texture* tileset_image = IMG_LoadTexture(renderer,"assets/ground.png");
+    SDL_Rect teste;
+    teste.x = 0;
+    teste.y = 0;
+    teste.w = 16;
+    teste.h = 16;*/
 
     SDL_Texture* bg_image = IMG_LoadTexture(renderer,"assets/bg.png");
     SDL_Rect bg_rect;
@@ -71,8 +58,6 @@ int main(int argc, char **argv)
    /* Player* player = new Player("assets/astronaut.png");
     player->setQuad(0,0,16,16);*/
 
-    objects.push_back(new Player("assets/astronaut.png", 0, 0));
-    objects[0]->setQuad(0,0,16,16);
 
     float timeCheck = SDL_GetTicks();
     float delta = 0;
@@ -84,11 +69,16 @@ int main(int argc, char **argv)
     float ntime = 0.f;
     float fps = 0;
 
-    for(int i = 1; i < 5; i++){
+    ScreenManager::addScreen("menu", new GameScreen());
+
+    /*for(int i = 0; i < 4; i++){
         objects.push_back(new Enemy("assets/box.png", i*16, 120));
         objects[i]->setQuad(0,0,16,16);
         //objects[i]->setX(i*16);
-    }
+    }*/
+    objects.push_back(new Enemy("assets/skeleton.png", 0, 0));
+    objects.push_back(new Player("assets/astronaut.png", 0, 0));
+    objects[1]->setQuad(0,0,16,16);
 
     /*enemies.push_back(new Enemy("assets/box.png"));
     enemies[4]->setQuad(0,0,16,16);
@@ -114,7 +104,8 @@ int main(int argc, char **argv)
         bg_rect.x = 384-Camera::X;
         SDL_RenderCopy(renderer,bg_image,&bg_src,&bg_rect);
         */
-        for(int i = 0; i < 128; i+=16)
+
+        for(int i = 0; i < 512; i+=16)
         {
             bg_rect.y = i-Camera::Y;
             for(int j = 0; j < 512; j += 16){
@@ -123,13 +114,25 @@ int main(int argc, char **argv)
             }
         }
 
+        ScreenManager::Update(delta);
+        ScreenManager::Draw();
+
+        //std::cout << "Funcionando até aqui" << std::endl;
+        /*for (int yy = 0; yy < height; yy++){
+            for(int xx = 0; xx < width; xx++){
+                teste.x = xx*16 - Camera::X;
+                teste.y = yy*16 - Camera::Y;
+                SDL_RenderCopy(renderer,tileset_image,&tileset[Utils::tilemap[xx][yy]-1],&teste);
+            }
+        }*/
+
 
         for(int i = 0; i < objects.size(); i++){
             //player->collision(enemies[i]);
-            for(int j = 0; j < objects.size(); j++){
+            /*for(int j = 0; j < objects.size(); j++){
                 if (objects[i] != objects[j])
                     objects[i]->collision(objects[j]);
-            }
+            }*/
             objects[i]->Update(delta);
             objects[i]->Draw();
         }
