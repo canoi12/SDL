@@ -127,29 +127,31 @@ void Player::Update(float delta)
         col_down = true;
 
     if (!col_down && 
-        !Utils::check_ground(x - 3, y + 7 + dy, "solid", 1, ScreenManager::currentScreen->map) && 
-        !Utils::check_ground(x + 3, y + 7 + dy, "solid", 1, ScreenManager::currentScreen->map) &&
-        !((Utils::check_ground(x + 3, y + 9 + dy, "solid", 2) || 
-         Utils::check_ground(x - 3, y + 9 + dy, "solid", 2)) && 
+        !Utils::check_ground(x - abs(dx), y + 7, "solid", 1) && 
+        !Utils::check_ground(x + abs(dx), y + 7, "solid", 1) &&
+        !((Utils::check_ground(x + 3, y + 9, "solid", 2) || 
+         Utils::check_ground(x - 3, y + 9, "solid", 2)) && 
          dy >= 0)){
         dy += 0.2f;
+        isGround = false;
     }
     else {
-        while(Utils::check_ground(x, y + 6 + dy, "solid", 1, ScreenManager::currentScreen->map)) {
-            y -= 1;
-        }
-        while (Utils::check_ground(x + 3, y + 8 + dy, "solid", 2) || 
-                Utils::check_ground(x - 3, y + 8 + dy, "solid", 2))
-                {
-                    y -= 1;
-                }
-        dy *= -bounce;
-         if(!isGround)
+        if(!isGround)
         {
             isGround = true;
             xscale = 1.5f;
             yscale = 0.5f;
         }
+        while(Utils::check_ground(x + abs(dx), y + 6, "solid", 1) ||
+              Utils::check_ground(x - abs(dx), y + 6, "solid", 1)) {
+            y -= 1;
+        }
+        while (Utils::check_ground(x + abs(dx), y + 8, "solid", 2) || 
+                Utils::check_ground(x - abs(dx), y + 8, "solid", 2))
+                {
+                    y -= 1;
+                }
+        dy *= -bounce;
         if(dy >= -0.5f && dy <= 0.5f)
         {
             dy = 0;

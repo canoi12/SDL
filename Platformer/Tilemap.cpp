@@ -126,8 +126,14 @@ void Tilemap::Draw() {
             for(int xx = 0; xx < width; xx++){
                 rect.x = xx*tile_size - Camera::X;
                 rect.y = yy*tile_size - Camera::Y;
-                SDL_RenderCopy(Renderer::getRenderer(),image,&tiles[tilemap[l][xx][yy]-1],&rect);
+                //std::cout << rect.x << " " << Camera::X << std::endl;
+                if (rect.x + Camera::X > Camera::X - 96 &&
+                    rect.x + Camera::X < Camera::X + 192 &&
+                    rect.y + Camera::Y > Camera::Y - 96 &&
+                    rect.y + Camera::Y < Camera::Y + 192)
+                    SDL_RenderCopy(Renderer::getRenderer(),image,&tiles[tilemap[l][xx][yy]-1],&rect);
             }
         }
     }
+    std::cout << Camera::X << std::endl;
 }
