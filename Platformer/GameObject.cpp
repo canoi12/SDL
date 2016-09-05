@@ -106,7 +106,9 @@ int GameObject::getHeight()
     return height;
 }
 
-bool GameObject::collision(GameObject* obj2){}
+bool GameObject::collision(GameObject* obj2){
+    return true;
+}
 
 void GameObject::Update(float delta)
 {

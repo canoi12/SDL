@@ -37,6 +37,8 @@ public:
 
     int tile_size;
 
+    std::map<std::string, std::map<int,int> > properties;
+
 private:
     SDL_Texture* image;
     SDL_Rect rect;

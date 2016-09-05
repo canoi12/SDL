@@ -34,11 +34,37 @@ Tilemap::Tilemap(std::string map_path) {
 
         //std::cout << elemName << std::endl;
 
+        if(elemName == "tileset")
+        {
+            for (TiXmlElement* tile = elem->FirstChildElement(); tile != NULL;
+                tile = tile->NextSiblingElement())
+                {
+                    std::string nameteste = tile->Value();
+
+                    if (nameteste == "tile")
+                    {
+                        int id = Utils::CharToInt(tile->Attribute("id"));
+                        TiXmlElement* propertie = tile->FirstChildElement();
+                        for(TiXmlElement* prop = propertie->FirstChildElement(); prop != NULL;
+                            prop = prop->NextSiblingElement())
+                            {
+                                //screens.insert(std::pair<std::string, GameScreen*>(name, screen));
+                                std::string propname = prop->Attribute("name");
+                                //std::cout << propname << " " << id << std::endl;
+                                //properties.insert(std::pair<std::string, int>(propname, id));
+                                properties[propname][id] = Utils::CharToInt(prop->Attribute("value"));
+
+                                //std::cout << properties["solid"].size() << std::endl;
+                            }
+                    }
+                }
+        }
+
         if(elemName == "layer")
         {
 
             int **tiletest = new int *[width];
-            std::cout << "Funcionando até aqui" << std::endl;
+            //std::cout << "Funcionando até aqui" << std::endl;
             for (int i = 0; i < width; i++)
             {
                 tiletest[i] = new int[height];
@@ -46,7 +72,6 @@ Tilemap::Tilemap(std::string map_path) {
 
             tilemap.push_back(tiletest);
             int x_teste = 0;
-            int y_teste = 0;
             int yy = 0;
             int xx = 0;
             TiXmlElement* data = elem->FirstChildElement();
@@ -68,6 +93,9 @@ Tilemap::Tilemap(std::string map_path) {
             layers++;
         }
     }
+
+    //std::cout << "teste" << std::endl;
+    //std::cout << properties["solid"][0] << std::endl;
 }
 
 Tilemap::~Tilemap() {}

@@ -67,7 +67,7 @@ int main(int argc, char **argv)
     int i = 0;
 
     float ntime = 0.f;
-    float fps = 0;
+    //float fps;
 
     ScreenManager::addScreen("menu", new GameScreen());
 
@@ -77,7 +77,7 @@ int main(int argc, char **argv)
         //objects[i]->setX(i*16);
     }*/
     objects.push_back(new Enemy("assets/skeleton.png", 0, 0));
-    objects.push_back(new Player("assets/astronaut.png", 0, 0));
+    objects.push_back(new Player("assets/astronaut.png", 300, 0));
     objects[1]->setQuad(0,0,16,16);
 
     /*enemies.push_back(new Enemy("assets/box.png"));
@@ -127,7 +127,7 @@ int main(int argc, char **argv)
         }*/
 
 
-        for(int i = 0; i < objects.size(); i++){
+        for(unsigned int i = 0; i < objects.size(); i++){
             //player->collision(enemies[i]);
             /*for(int j = 0; j < objects.size(); j++){
                 if (objects[i] != objects[j])
@@ -149,8 +149,7 @@ int main(int argc, char **argv)
         i++;
 
         if(i == 10) {
-            float avgDelta = deltaAcumulator/10.f;
-            fps = 1.f/delta;
+            //fps = 1.f/delta;
             i = 0;
             deltaAcumulator = 0.f;
         }

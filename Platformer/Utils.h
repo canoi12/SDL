@@ -24,8 +24,8 @@ class Tilemap;
 
 class Utils {
 public:
-    static bool check_solid(int x, int y, Tilemap* map);
-
+    static bool check_ground(int x, int y, std::string type, int value, Tilemap* map);
+    static bool check_ground(int x, int y, std::string type, int value);
     static int CharToInt(const char* value)
     {
         std::stringstream strValue;
