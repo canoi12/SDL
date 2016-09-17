@@ -67,7 +67,7 @@ int main(int argc, char **argv)
     int i = 0;
 
     float ntime = 0.f;
-    //float fps;
+    float fps;
 
     ScreenManager::addScreen("menu", new GameScreen());
 
@@ -149,7 +149,7 @@ int main(int argc, char **argv)
         i++;
 
         if(i == 10) {
-            //fps = 1.f/delta;
+            fps = 1.f/delta;
             i = 0;
             deltaAcumulator = 0.f;
         }

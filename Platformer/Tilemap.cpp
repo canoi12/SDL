@@ -135,5 +135,4 @@ void Tilemap::Draw() {
             }
         }
     }
-    std::cout << Camera::X << std::endl;
 }
